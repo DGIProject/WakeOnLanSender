@@ -82,8 +82,9 @@ public class WOL_class extends JApplet implements ActionListener,ItemListener {
 			{
 				System.out.println("bla");
 				if (validateMac(mac.getText()))
-				{					
-				Wol(ip.getText(), mac.getText());
+				{	
+					int portint = Integer.parseInt(port.getText());
+				Wol(ip.getText(), mac.getText(), portint);
 				}
 				else
 				{
@@ -101,9 +102,10 @@ public class WOL_class extends JApplet implements ActionListener,ItemListener {
 		}
 	}
 
-	private void Wol(String ip, String mac) {
+	private void Wol(String ip, String mac, int port) {
 		
 		String ipStr = ip;
+		System.out.println(port);
         String macStr = mac;
         //int portint = Integer.parseInt(port); 
         
@@ -118,7 +120,7 @@ public class WOL_class extends JApplet implements ActionListener,ItemListener {
             }
             
             InetAddress address = InetAddress.getByName(ipStr);
-            DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, 9);
+            DatagramPacket packet = new DatagramPacket(bytes, bytes.length, address, port);
             DatagramSocket socket = new DatagramSocket();
             socket.send(packet);
             socket.close();
