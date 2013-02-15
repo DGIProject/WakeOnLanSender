@@ -3,11 +3,12 @@ $mac1 = str_replace ( "-", "",$_GET['MAC'] ) ;
 $mac = str_replace ( ":", "",$mac1 ) ;
 $IP_ADDRESS=$_GET['IP'];
 $MAC_ADDRESS=$mac;
+$PORT = $_GET['PORT'];
  
 class Wol{
   private $nic;
-  public function wake($mac,$ip){
-    $this->nic = fsockopen("udp://$ip", 9);
+  public function wake($mac,$ip,$port){
+    $this->nic = fsockopen("udp://$ip", "$port");
     if( !$this->nic ){
       fclose($this->nic);
       return false;
@@ -20,7 +21,6 @@ class Wol{
   }
   private function pacquet($Mac){
     $packet = "";
-    //for($i = 0; $i < 6; $i++){$packet .= chr(0xFF);}
     $packet = "\xFF\xFF\xFF\xFF\xFF\xFF";
     for ($j = 0; $j < 16; $j++){
       for($i = 0; $i < 12; $i=$i + 2){$packet .= chr(hexdec(substr($Mac, $i, 2)));}
@@ -57,7 +57,7 @@ if ($php_wal!="OK") {
 <?php
     exit();
   }
-  $wol->wake("$MAC_ADDRESS","$IP_ADDRESS");
+  $wol->wake("$MAC_ADDRESS","$IP_ADDRESS", "$PORT");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
